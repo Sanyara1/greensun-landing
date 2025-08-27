@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex"> <title>Greensun — Франшиза солнечных станций</title>
+  <meta name="description" content="Франшиза солнечных станций под ключ: проектирование, монтаж, мониторинг и цифровая верификация энергии через GSun."/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons (lucide) -->
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root{
+      --gold:#FFC83A;
+      --teal:#0E3B2E;
+      --emerald:#18A957;
+      --slate:#1F2937;
+      --light:#F3F4F6;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;color:#111827;background:#fff}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1120px;margin:0 auto;padding:0 16px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+    .btn.emerald{background:var(--emerald);color:#fff;border-color:var(--emerald)}
+    .btn.outline{background:#fff;color:#111827;border-color:#d1d5db}
+    .badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:12px;background:var(--teal);color:#fff}
+    header.sticky{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);border-bottom:1px solid #e5e7eb}
+    header .nav a{font-size:14px;color:#374151}
+    header .nav a:hover{color:#111827}
+    .grid{display:grid;gap:24px}
+    .grid.two{grid-template-columns:1fr}
+    @media (min-width: 1024px){.grid.two{grid-template-columns:1fr 1fr}}
+    .section{padding:64px 0}
+    .section.light{background:var(--light)}
+    h1{font-size:40px;line-height:1.1;margin:0}
+    @media (min-width:640px){h1{font-size:52px}}
+    h2{font-size:30px;margin:0}
+    p.lead{font-size:18px;color:#4b5563;max-width:60ch}
+    .card{border:1px solid #e5e7eb;border-radius:16px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+    .card .card-header{padding:16px 16px 0 16px}
+    .card .card-title{font-weight:700}
+    .card .card-content{padding:16px}
+    .stat{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:#ffffffb3;border:1px solid #eee}
+    .stat .icon{padding:8px;border-radius:10px;background:#F3F4F6}
+    .muted{color:#6b7280}
+    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .input{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:14px}
+    label{display:block;font-size:12px;color:#6b7280;margin-bottom:6px}
+    .pill{padding:12px;border-radius:12px;background:#F9FAFB;border:1px solid #e5e7eb}
+    ul.disc{padding-left:18px}
+    ul.disc li{margin:6px 0;list-style:disc}
+    .accordion-item{border-bottom:1px solid #e5e7eb}
+    .accordion-trigger{width:100%;text-align:left;background:none;border:none;padding:16px 0;font-size:16px;font-weight:600;cursor:pointer}
+    .accordion-content{display:none;padding:0 0 16px 0;color:#4b5563}
+    .accordion-item.open .accordion-content{display:block}
+    footer{border-top:1px solid #e5e7eb}
+    .tiny{font-size:12px;color:#9ca3af}
+    .hex{display:inline-block;vertical-align:middle}
+    .map{position:relative;height:440px;border-radius:16px;border:1px solid #e5e7eb;overflow:hidden;background:radial-gradient(1200px 400px at 20% 30%, #E5F6EE 0%, #ffffff 60%)}
+    .map::after{content:"";position:absolute;inset:0;opacity:.08;background-image:repeating-linear-gradient(90deg, #0E3B2E 0, #0E3B2E 1px, transparent 1px, transparent 40px), repeating-linear-gradient(#0E3B2E 0, #0E3B2E 1px, transparent 1px, transparent 40px)}
+    .chip{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="sticky">
+    <div class="container" style="height:64px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="hex" id="hex-28"></span>
+        <span style="font-weight:600;letter-spacing:.02em;">Greensun</span>
+        <span class="badge">GSun</span>
+      </div>
+      <nav class="nav" style="display:none;gap:20px;align-items:center" id="nav-desktop">
+        <a href="#how">Как это работает</a>
+        <a href="#unit">Экономика</a>
+        <a href="#map">Карта</a>
+        <a href="#package">Пакет франшизы</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a class="btn outline" style="display:none" id="brandkit-btn" href="#" download>Скачать бренд‑кит</a>
+        <a class="btn primary" href="#cta">Стать франчайзи <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="section light">
+    <div class="container">
+      <div class="grid two" style="align-items:center">
+        <div>
+          <h1>Франшиза солнечных станций <span style="color:var(--emerald)">«под ключ»</span></h1>
+          <p class="lead" style="margin-top:16px">
+            Полный цикл: проектирование, монтаж, мониторинг и цифровая верификация происхождения энергии через токен <b>GSun</b> (Polygon).
+            Чистая генерация + понятная экономика для B2B-объектов.
+          </p>
+          <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px">
+            <a class="btn primary" href="#cta">Получить презентацию <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+            <a class="btn outline" href="#cases">Смотреть кейсы</a>
+          </div>
+          <div style="margin-top:24px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+            <div class="stat">
+              <div class="icon"><i data-lucide="factory" style="width:20px;height:20px;color:var(--teal)"></i></div>
+              <div>
+                <div class="tiny" style="font-size:12px">Установленная мощность</div>
+                <div style="font-weight:600">200 кВт</div>
+              </div>
+            </div>
+            <div class="stat">
+              <div class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;color:var(--teal)"></i></div>
+              <div>
+                <div class="tiny" style="font-size:12px">Средняя генерация (100 кВт)</div>
+                <div style="font-weight:600">16.8 МВт·ч/мес</div>
+              </div>
+            </div>
+            <div class="stat">
+              <div class="icon"><i data-lucide="leaf" style="width:20px;height:20px;color:var(--teal)"></i></div>
+              <div>
+                <div class="tiny" style="font-size:12px">CO₂ компенсация</div>
+                <div style="font-weight:600">12 т/мес</div>
+              </div>
+            </div>
+          </div>
+          <div class="tiny" style="margin-top:6px">*по действующим станциям в Сочи</div>
+        </div>
+
+        <div id="unit">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title" style="display:flex;align-items:center;gap:8px">
+                <i data-lucide="calculator" style="width:20px;height:20px"></i> Unit‑экономика
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="calc-grid">
+                <div>
+                  <label>Мощность станции (кВт)</label>
+                  <input id="capacityKW" class="input" type="number" min="10" max="1000" value="50"/>
+                </div>
+                <div>
+                  <label>Тариф (₽/кВт·ч)</label>
+                  <input id="tariff" class="input" type="number" step="0.01" min="0" value="14.65"/>
+                </div>
+                <div>
+                  <label>Коэф. инсоляции (0.8–1.2)</label>
+                  <input id="insolation" class="input" type="number" step="0.05" min="0.5" max="1.5" value="1"/>
+                </div>
+                <div>
+                  <label>Стоимость проекта (₽)</label>
+                  <input id="projectCost" class="input" type="number" step="1000" min="0" value="0"/>
+                </div>
+              </div>
+              <div class="calc-grid" style="margin-top:12px">
+                <div class="pill">
+                  Месячная генерация<br/>
+                  <span id="monthlyKWh" style="font-size:20px;font-weight:700">—</span> <span>кВт·ч</span>
+                </div>
+                <div class="pill">
+                  Выручка/мес<br/>
+                  <span id="monthlyRevenue" style="font-size:20px;font-weight:700">—</span> <span>₽</span>
+                </div>
+              </div>
+              <div class="tiny" id="calcNote" style="margin-top:8px">
+                Расчёт ориентировочный. Фактические цифры зависят от инсоляции, оборудования и профиля потребления.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="section">
+    <div class="container">
+      <h2>Как это работает</h2>
+      <p class="muted" style="margin-top:8px">От аудита до токенизированной верификации — под одной крышей.</p>
+      <div class="grid" style="margin-top:20px;grid-template-columns:repeat(1,minmax(0,1fr))">
+        <div class="grid" style="grid-template-columns:repeat(1,minmax(0,1fr));gap:16px">
+          <div class="card">
+            <div class="card-header"><div class="card-title" style="display:flex;align-items:center;gap:8px;color:#065f46">
+              <i data-lucide="building-2" style="width:20px;height:20px"></i> Аудит объекта</div></div>
+            <div class="card-content muted">Оценка крыши/площадки, юг/углы, сеть, смета</div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title" style="display:flex;align-items:center;gap:8px;color:#065f46">
+              <i data-lucide="zap" style="width:20px;height:20px"></i> Монтаж 50–500 кВт</div></div>
+            <div class="card-content muted">Проект, поставка, инсталляция, пусконаладка</div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title" style="display:flex;align-items:center;gap:8px;color:#065f46">
+              <i data-lucide="shield" style="width:20px;height:20px"></i> Мониторинг</div></div>
+            <div class="card-content muted">Личный кабинет, регламентное ТО, отчёты</div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title" style="display:flex;align-items:center;gap:8px;color:#065f46">
+              <i data-lucide="qrcode" style="width:20px;height:20px"></i> Верификация GSun</div></div>
+            <div class="card-content muted">QR-страница, происхождение энергии, CO₂</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section id="map" class="section light">
+    <div class="container">
+      <h2>Карта присутствия</h2>
+      <p class="muted" style="margin-top:8px">Запущено в Сочи. Открыты к пилотам в новых регионах.</p>
+      <div class="map">
+        <div class="chip" style="position:absolute;left:54%;top:49%;transform:translate(-50%,-50%);">
+          <div style="width:10px;height:10px;border-radius:999px;background:var(--emerald)"></div>
+          <div class="tiny" style="color:#374151;font-size:12px">Сочи — п. Лазаревское · 100 кВт</div>
+        </div>
+        <div class="tiny" style="position:absolute;left:16px;bottom:14px;background:#ffffffcc;border:1px solid #e5e7eb;padding:6px 10px;border-radius:8px">Готовы к подключению франчайзи в вашем регионе → оставьте заявку</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Franchise package -->
+  <section id="package" class="section">
+    <div class="container">
+      <h2>Пакеты франшизы</h2>
+      <p class="muted" style="margin-top:8px">Примерная конфигурация. Условия уточняются под ваш регион и профиль объектов.</p>
+      <div class="grid" style="margin-top:16px;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i data-lucide="check" style="width:16px;height:16px"></i> Start (50–100 кВт)</div></div>
+          <div class="card-content muted">
+            <ul class="disc">
+              <li>Айдентика и сайт‑лендинг</li>
+              <li>Шаблоны коммерческих и смет</li>
+              <li>Базовая поддержка монтажа</li>
+              <li>Мониторинг 1 объекта</li>
+              <li>Юр. пакет (RU)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i data-lucide="check" style="width:16px;height:16px"></i> Pro (100–300 кВт)</div></div>
+          <div class="card-content muted">
+            <ul class="disc">
+              <li>Расширенный маркетинг‑пак</li>
+              <li>Техподдержка и аудит проекта</li>
+              <li>Мониторинг до 5 объектов</li>
+              <li>Верификация GSun (QR/NFT)</li>
+              <li>Обучение продажам B2B</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i data-lucide="check" style="width:16px;height:16px"></i> Enterprise (300–500+ кВт)</div></div>
+          <div class="card-content muted">
+            <ul class="disc">
+              <li>Личный кабинет B2B</li>
+              <li>Совместные PR‑кейсы</li>
+              <li>SLA по сервису и ТО</li>
+              <li>Поддержка сертификации (Verra/GS)</li>
+              <li>Архитектура под мульти‑локации</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cases -->
+  <section id="cases" class="section light">
+    <div class="container">
+      <h2>Кейсы</h2>
+      <div class="grid" style="margin-top:16px;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+              <span>Сочи, п. Лазаревское</span>
+              <span class="badge" style="background:#e5e7eb;color:#111827">100 кВт</span>
+            </div>
+          </div>
+          <div class="card-content muted" style="display:grid;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> 16.8 МВт·ч/мес (средняя генерация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="leaf" style="width:16px;height:16px"></i> 12 т CO₂/мес (компенсация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="map-pin" style="width:16px;height:16px"></i> ул. Калараша 36</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+              <span>Отель — гибридная схема</span>
+              <span class="badge" style="background:#e5e7eb;color:#111827">50 кВт</span>
+            </div>
+          </div>
+          <div class="card-content muted" style="display:grid;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> ~8.4 МВт·ч/мес (модель)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="shield" style="width:16px;height:16px"></i> Мониторинг + сервис (квартальный)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="qrcode" style="width:16px;height:16px"></i> QR-страница верификации энергии</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA + Form -->
+  <section id="cta" class="section" style="background:var(--teal);color:#fff">
+    <div class="container">
+      <div class="grid two" style="align-items:center">
+        <div>
+          <h2>Готовы запустить франшизу в вашем городе?</h2>
+          <p style="opacity:.8;margin-top:8px">Оставьте контакты — отправим презентацию, юр.структуру и финансовую модель. Ответим на вопросы и назначим созвон.</p>
+          <div class="tiny" style="display:flex;align-items:center;gap:6px;margin-top:12px">
+            <i data-lucide="shield" style="width:16px;height:16px"></i> Ваши данные в безопасности. Никакого спама.
+          </div>
+        </div>
+        <div class="card" style="background:#fff;color:#111827">
+          <div class="card-content">
+            <div>
+              <label>Имя</label>
+              <input class="input" id="name" placeholder="Иван"/>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+              <div>
+                <label>E-mail</label>
+                <input class="input" id="email" type="email" placeholder="you@example.com"/>
+              </div>
+              <div>
+                <label>Телефон</label>
+                <input class="input" id="phone" type="tel" placeholder="+7 ___ ___-__-__"/>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <label>Город</label>
+              <input class="input" id="city" placeholder="Санкт-Петербург"/>
+            </div>
+            <div style="margin-top:12px">
+              <label>Комментарий</label>
+              <input class="input" id="comment" placeholder="Кратко о вашем объекте/сети"/>
+            </div>
+            <button class="btn emerald" id="submitLead" style="width:100%;margin-top:12px">Отправить заявку</button>
+            <div class="tiny" id="leadNote" style="margin-top:8px">Нажимая на кнопку, вы соглашаетесь с обработкой персональных данных.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h2>FAQ</h2>
+      <div class="accordion" style="margin-top:16px">
+        <div class="accordion-item">
+          <button class="accordion-trigger">Это про крипту? Будут ли обещания доходности?</button>
+          <div class="accordion-content">Нет. <b>GSun</b> — утилитарный токен верификации происхождения энергии и CO₂. Мы не даём обещаний доходности; юридическая модель очищена от признаков ЦФА/ценных бумаг согласно ФЗ-259.</div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Какие требования к локации?</button>
+          <div class="accordion-content">Крыша/площадка без затенений, ориентир на юг (±45°), прочность для монтажа, доступ к щиту/сети, местные разрешения.</div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Как работает сервис и ТО?</button>
+          <div class="accordion-content">Квартальный регламент: проверка панелей, кабелей, разъёмов, соединений, логов, сумматора, инвертора, мойка панелей и обработка воском. Стоимость ТО — по прайсу.</div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Сколько времени занимает запуск?</button>
+          <div class="accordion-content">Поставка оборудования ~35 дней, монтаж 7–10 дней. Каркас можно собирать параллельно с ожиданием оборудования.</div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Какие пакеты и условия франшизы?</button>
+          <div class="accordion-content">Доступны уровни Start / Pro / Enterprise. Размеры паушального взноса и роялти зависят от региона и мощности. Условия согласуются индивидуально и не являются публичной офертой.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container" style="padding:36px 0">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span class="hex" id="hex-20"></span>
+        <span style="font-weight:600">Greensun</span>
+        <span class="badge" style="background:#e5e7eb;color:#111827">GSun</span>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr;gap:18px">
+        <div>Утилитарная верификация происхождения энергии и CO₂ на Polygon. Без обещаний доходности.</div>
+        <div>
+          <div style="font-weight:600;margin-bottom:6px">Контакты</div>
+          <div>ИП Удодов Александр Федорович</div>
+          <div>ИНН: 615425089014</div>
+          <div>E-mail: hello@greensun.example</div>
+        </div>
+        <div>
+          <div style="font-weight:600;margin-bottom:6px">Документы</div>
+          <ul style="display:grid;gap:6px;padding-left:0;list-style:none">
+            <li><a class="underline" href="#">Brandbook (RU/EN)</a></li>
+            <li><a class="underline" href="#">Презентация</a></li>
+            <li><a class="underline" href="#">Юридический меморандум</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="tiny" style="margin-top:16px">© <span id="year"></span> Greensun. Все права защищены.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple helpers
+    const $ = (s)=>document.querySelector(s);
+
+    // Hex "G" logo
+    function renderHex(el, size=28, fill=getComputedStyle(document.documentElement).getPropertyValue('--gold').trim(), bg='transparent'){
+      const s=size, cx=s/2, cy=s/2, R=s*0.40;
+      const pts = Array.from({length:6}).map((_,i)=>{
+        const ang=((30+i*60)*Math.PI)/180;
+        return (cx+R*Math.cos(ang))+','+(cy+R*Math.sin(ang));
+      }).join(' ');
+      const wedge = [(cx - 0.06*s)+','+(cy - 0.42*s),(cx + 0.44*s)+','+(cy - 0.06*s),(cx - 0.06*s)+','+(cy + 0.12*s)].join(' ');
+      el.innerHTML = '<svg width="'+s+'" height="'+s+'" viewBox="0 0 '+s+' '+s+'" aria-hidden>'+
+        '<rect width="100%" height="100%" fill="'+bg+'"/>'+
+        '<polygon points="'+pts+'" fill="'+fill+'"/>'+
+        '<polygon points="'+wedge+'" fill="'+bg+'"/>'+
+        '<circle cx="'+cx+'" cy="'+cy+'" r="'+(s*0.165)+'" fill="'+bg+'"/>'+
+        '<rect x="'+(cx - s*0.01)+'" y="'+(cy - s*0.045/2)+'" width="'+(s*0.22)+'" height="'+(s*0.045)+'" fill="'+bg+'"/>'+
+      '</svg>';
+    }
+    renderHex($('#hex-28'),28); renderHex($('#hex-20'),20);
+
+    // Icons
+    document.addEventListener('DOMContentLoaded',()=>{ if (window.lucide) lucide.createIcons(); });
+
+    // Calculator
+    const monthKWhPerKW = 168;
+    function recalc(){
+      const capacityKW = Number($('#capacityKW').value||0);
+      const tariff = Number($('#tariff').value||0);
+      const ins = Number($('#insolation').value||1);
+      const projectCost = Number($('#projectCost').value||0);
+      const monthlyKWh = Math.round(capacityKW * monthKWhPerKW * ins);
+      const monthlyRevenue = Math.round(monthlyKWh * tariff);
+      $('#monthlyKWh').textContent = monthlyKWh.toLocaleString('ru-RU');
+      $('#monthlyRevenue').textContent = monthlyRevenue.toLocaleString('ru-RU');
+      const note = $('#calcNote');
+      if (projectCost>0 && monthlyRevenue>0){
+        const pbMonths = projectCost / monthlyRevenue;
+        note.innerHTML = 'Расчёт ориентировочный. Фактические цифры зависят от инсоляции, оборудования и профиля потребления.<br>Окупаемость ≈ <b>'+pbMonths.toFixed(1)+'</b> мес ('+(pbMonths/12).toFixed(1)+' лет)';
+      } else {
+        note.textContent = 'Расчёт ориентировочный. Фактические цифры зависят от инсоляции, оборудования и профиля потребления.';
+      }
+    }
+    ['capacityKW','tariff','insolation','projectCost'].forEach(id=>$('#'+id).addEventListener('input', recalc));
+    recalc();
+
+    // Accordion
+    document.querySelectorAll('.accordion-item').forEach(item=>{
+      const btn = item.querySelector('.accordion-trigger');
+      btn.addEventListener('click', ()=> item.classList.toggle('open'));
+    });
+
+    // Lead form (mock)
+    $('#submitLead').addEventListener('click', ()=>{
+      const payload = {
+        name: $('#name').value.trim(),
+        email: $('#email').value.trim(),
+        phone: $('#phone').value.trim(),
+        city: $('#city').value.trim(),
+        comment: $('#comment').value.trim(),
+        source: 'landing_franchise_static',
+        ts: new Date().toISOString()
+      };
+      console.log('[mock submit]', payload);
+      $('#leadNote').textContent = 'Спасибо! Мы свяжемся с вами в ближайшее время.';
+    });
+
+    // Footer year
+    $('#year').textContent = new Date().getFullYear();
+
+    // Tiny responsive niceties
+    function onResize(){
+      const nav = $('#nav-desktop');
+      if (window.innerWidth>=900) nav.style.display = 'flex'; else nav.style.display='none';
+    }
+    window.addEventListener('resize', onResize); onResize();
+  </script>
+  <div style="position:fixed;left:0;right:0;bottom:0;padding:8px 12px;background:#111827;color:#fff;font:12px/1.4 system-ui">
+    Страница не найдена (404). Возврат на <a href="/" style="color:#FFC83A">главную</a>.
+  </div>
+</body>
+</html>
