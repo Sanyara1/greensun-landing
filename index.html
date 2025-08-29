@@ -2,6 +2,22 @@
 <html lang="ru">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap" rel="stylesheet">
 <style>
+
+/* === GREENSUN · CASES (build) === */
+.gs-cases{ padding: 48px 20px; background: transparent; }
+.gs-cases .gs-container{ max-width: 1200px; margin: 0 auto; }
+.gs-cases-title{ margin:0 0 8px; font-weight: 800; font-size: clamp(24px, 3vw, 36px); letter-spacing: -0.02em; color: var(--deep-teal, #0E3B2E); }
+.gs-cases-sub{ margin:0 0 16px; color: var(--gs-muted, #6B7280); }
+.gs-cases-grid{ display:grid; gap:16px; grid-template-columns: repeat(2, minmax(0,1fr)); }
+@media (max-width: 900px){ .gs-cases-grid{ grid-template-columns: 1fr; } }
+.gs-case-card{ background:#fff; border:1px solid var(--gs-line, #E5EFE9); border-radius:16px; padding:18px; box-shadow: 0 10px 24px rgba(0,0,0,.06); }
+.gs-case-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+.gs-case-title{ font-weight:800; font-size:18px; letter-spacing:-.01em; color: var(--slate, #1F2937); }
+.gs-case-meta{ color: var(--gs-muted, #6B7280); font-size:12px; white-space:nowrap; }
+.gs-case-stats{ display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 8px; }
+.gs-pill{ background: rgba(24,169,87,.10); color: var(--deep-teal, #0E3B2E); border: 1px solid rgba(24,169,87,.22); padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; }
+.gs-case-addr{ color:#374151; font-size:14px; }
+
 /* === GSun brand tweaks === */
 h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 .price-tag { display:flex; align-items:baseline; gap:6px; font-weight:800; font-size:28px; margin:6px 0 12px; }
@@ -229,8 +245,57 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       <h2>Карта присутствия</h2>
       <p class="muted" style="margin-top:8px">Запущено в Сочи. Открыты к пилотам в новых регионах.</p>
       <div class="map">
-        <div class="chip" style="position:absolute;left:54%;top:49%;transform:translate(-50%,-50%);">
+        <div class="chip" data-lat="43.908" data-lon="39.330" style="position:absolute;left:54%;top:49%;transform:translate(-50%,-50%);">
           <div style="width:10px;height:10px;border-radius:999px;background:var(--emerald)"></div>
+
+<!-- Радиус 5 км: совокупная генерация (для Pro) -->
+<div class="card" id="pro-radius-card" style="margin-top:16px">
+  <div class="card-header">
+    <div class="card-title" style="display:flex;align-items:center;gap:8px">
+      <i data-lucide="target" style="width:18px;height:18px"></i>
+      Радиус: совокупная генерация
+    </div>
+  </div>
+  <div class="card-content">
+    <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
+      <div>
+        <label>Центр расчёта</label>
+        <select id="radiusCenter" class="input">
+          <option value="k36">ул. Калараша 36</option>
+          <option value="p2">ул. Павлова 2</option>
+          <option value="k131">ул. Калараша 131</option>
+        </select>
+      </div>
+      <div>
+        <label>Радиус (км)</label>
+        <input id="radiusKm" class="input" type="number" min="1" max="20" step="0.5" value="5"/>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px; grid-template-columns:1fr 1fr 1fr; gap:12px">
+      <label class="pill" style="display:flex;align-items:center;gap:8px">
+        <input id="useMapCenter" type="checkbox"> Брать центр с карты
+      </label>
+      <label class="pill" style="display:flex;align-items:center;gap:8px">
+        <input id="excludeSelf" type="checkbox" checked> Исключить свой объект
+      </label>
+      <button id="syncMapCenter" class="btn outline" type="button">Синхронизировать</button>
+    </div>
+
+    <div class="tiny" style="margin-top:6px">
+      Центр: <b><span id="centerLat">—</span>, <span id="centerLon">—</span></b>
+    </div>
+
+    <div class="grid" style="margin-top:12px; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px">
+      <div class="pill">Объектов: <b><span id="rCount">—</span></b></div>
+      <div class="pill">Сумма: <b><span id="rMWh">—</span> МВт·ч/мес</b></div>
+      <div class="pill">Доля Pro 10%: <b><span id="rProMWh">—</span> МВт·ч/мес</b></div>
+      <div class="pill">Начисления*: <b><span id="rProRub">—</span> ₽/мес</b></div>
+    </div>
+    <div class="tiny" style="margin-top:6px">*По текущему тарифу в калькуляторе выше.</div>
+  </div>
+</div>
+
           <div class="tiny" style="color:#374151;font-size:12px">Сочи — п. Лазаревское · 100 кВт</div>
         </div>
         <div class="tiny" style="position:absolute;left:16px;bottom:14px;background:#ffffffcc;border:1px solid #e5e7eb;padding:6px 10px;border-radius:8px">Готовы к подключению франчайзи в вашем регионе → оставьте заявку</div>
@@ -546,5 +611,158 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
     }
     window.addEventListener('resize', onResize); onResize();
   </script>
+
+<script>
+/* ====== CONFIG: monitoring endpoint (override with window.GSUN_OBJECTS_ENDPOINT before this script) ====== */
+const GSUN_OBJECTS_ENDPOINT = window.GSUN_OBJECTS_ENDPOINT || '/api/objects.json';
+
+/* ====== Fallback objects ====== */
+let GS_OBJECTS = [
+  { id:'k36',  name:'ул. Калараша 36',  lat:43.9100, lon:39.3300, mwh:16.8, kw:100 },
+  { id:'p2',   name:'ул. Павлова 2',    lat:43.9030, lon:39.3220, mwh:16.8, kw:100 },
+  { id:'k131', name:'ул. Калараша 131', lat:43.9140, lon:39.3400, mwh:16.8, kw:100 },
+];
+
+/* ====== Load from monitoring (optional) ====== */
+async function tryFetchMonitoring(){
+  try{
+    const r = await fetch(GSUN_OBJECTS_ENDPOINT, {cache:'no-store'});
+    if(!r.ok) return;
+    const data = await r.json();
+    GS_OBJECTS = data.map((o,i)=>({
+      id: o.id || `obj_${i}`,
+      name: o.name || o.address || 'Объект',
+      lat:  Number(o.lat),
+      lon:  Number(o.lon),
+      kw:   Number(o.kw || o.capacity_kw || 0),
+      mwh:  o.mwh != null ? Number(o.mwh)
+           : (o.monthly_mwh != null ? Number(o.monthly_mwh)
+           : (o.kwh_month != null ? Number(o.kwh_month)/1000 : 0))
+    })).filter(o=>isFinite(o.lat)&&isFinite(o.lon));
+    const sel = document.getElementById('radiusCenter');
+    if (sel){
+      sel.innerHTML = GS_OBJECTS.map(o=>`<option value="${o.id}">${o.name}</option>`).join('');
+    }
+  }catch(e){ /* ignore */ }
+}
+
+/* ====== Map center detection ====== */
+function detectMapCenter(){
+  if (window.L && window.gsunLeafletMap && typeof window.gsunLeafletMap.getCenter==='function'){
+    const c = window.gsunLeafletMap.getCenter();
+    return {lat:c.lat, lon:c.lng};
+  }
+  if (window.mapboxgl && window.gsunMapboxMap && typeof window.gsunMapboxMap.getCenter==='function'){
+    const c = window.gsunMapboxMap.getCenter();
+    return {lat:c.lat, lon:c.lng};
+  }
+  if (window.ymaps && window.gsunYMap && typeof window.gsunYMap.getCenter==='function'){
+    const [lon,lat] = window.gsunYMap.getCenter();
+    return {lat, lon};
+  }
+  if (window.google && window.gsunGMap && typeof window.gsunGMap.getCenter==='function'){
+    const c = window.gsunGMap.getCenter();
+    return {lat:c.lat(), lon:c.lng()};
+  }
+  return null;
+}
+
+/* ====== Click on map chips (data-lat / data-lon) ====== */
+(function enableChipClicks(){
+  const mapSection = document.querySelector('#map .map');
+  if (!mapSection) return;
+  mapSection.addEventListener('click', (e)=>{
+    const el = e.target.closest('[data-lat][data-lon]');
+    if (!el) return;
+    const lat = Number(el.getAttribute('data-lat'));
+    const lon = Number(el.getAttribute('data-lon'));
+    if (isFinite(lat) && isFinite(lon)){
+      setManualCenter({lat, lon});
+    }
+  });
+})();
+
+/* ====== Manual center ====== */
+let manualCenter = null;
+function setManualCenter(c){
+  manualCenter = c;
+  const latEl = document.getElementById('centerLat');
+  const lonEl = document.getElementById('centerLon');
+  if (latEl) latEl.textContent = (c?.lat ?? '—').toLocaleString('ru-RU', {maximumFractionDigits:6});
+  if (lonEl) lonEl.textContent = (c?.lon ?? '—').toLocaleString('ru-RU', {maximumFractionDigits:6});
+  recalcRadius();
+}
+
+/* ====== Haversine ====== */
+function haversine(lat1, lon1, lat2, lon2){
+  const R = 6371, toRad = d => d*Math.PI/180;
+  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R * (2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+}
+
+/* ====== Radius calc ====== */
+function getCenterObj(){
+  const id = document.getElementById('radiusCenter')?.value;
+  return GS_OBJECTS.find(o=>o.id===id);
+}
+function currentCenter(){
+  const useMap = document.getElementById('useMapCenter')?.checked;
+  if (useMap){
+    const live = detectMapCenter();
+    if (live){ setManualCenter(live); return live; }
+    if (manualCenter) return manualCenter;
+  }
+  const obj = getCenterObj();
+  if (obj) return {lat:obj.lat, lon:obj.lon, selfId: obj.id};
+  return null;
+}
+function recalcRadius(){
+  const center = currentCenter();
+  const rKm = Number(document.getElementById('radiusKm')?.value || 5);
+  const excludeSelf = !!document.getElementById('excludeSelf')?.checked;
+  const out = {
+    countEl: document.getElementById('rCount'),
+    sumEl:   document.getElementById('rMWh'),
+    proEl:   document.getElementById('rProMWh'),
+    rubEl:   document.getElementById('rProRub'),
+  };
+  if (!center || !isFinite(center.lat) || !isFinite(center.lon)){
+    out.countEl.textContent = out.sumEl.textContent = out.proEl.textContent = out.rubEl.textContent = '—';
+    return;
+  }
+  let within = GS_OBJECTS.filter(o => haversine(center.lat, center.lon, o.lat, o.lon) <= rKm);
+  if (excludeSelf && center.selfId){
+    within = within.filter(o => o.id !== center.selfId);
+  }
+  const count  = within.length;
+  const sumMWh = within.reduce((s,o)=>s+Number(o.mwh||0), 0);
+  const proMWh = sumMWh * 0.10;
+  const tariff = Number(document.getElementById('tariff')?.value || 0); // ₽/кВт·ч
+  const proRub = proMWh * 1000 * tariff; // МВт·ч -> кВт·ч
+  out.countEl.textContent = count.toLocaleString('ru-RU');
+  out.sumEl.textContent   = sumMWh.toLocaleString('ru-RU', {maximumFractionDigits:1});
+  out.proEl.textContent   = proMWh.toLocaleString('ru-RU', {maximumFractionDigits:2});
+  out.rubEl.textContent   = Math.round(proRub).toLocaleString('ru-RU');
+}
+
+/* ====== Bindings ====== */
+['radiusCenter','radiusKm','tariff','useMapCenter','excludeSelf'].forEach(id=>{
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', recalcRadius);
+});
+document.getElementById('syncMapCenter')?.addEventListener('click', ()=>{
+  const live = detectMapCenter();
+  if (live) setManualCenter(live);
+  else recalcRadius();
+});
+
+document.addEventListener('DOMContentLoaded', async ()=>{
+  await tryFetchMonitoring();
+  const live = detectMapCenter();
+  if (live) setManualCenter(live); else recalcRadius();
+});
+</script>
+
 </body>
 </html>
