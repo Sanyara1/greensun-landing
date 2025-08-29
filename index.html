@@ -26,6 +26,13 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
 #package .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)) !important; gap:16px; }
 @media (max-width: 1024px){ #package .grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; } }
 @media (max-width: 640px){ #package .grid { grid-template-columns: 1fr !important; } }
+
+/* === Map overlay click-through fix === */
+#map .map{ position:relative; }
+#map .map::after{ pointer-events:none; z-index:0; }
+#map .map > *{ position:relative; z-index:1; }
+#map .chip, #map .btn{ position:relative; z-index:2; }
+
 </style>
 
 <head>
