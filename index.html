@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="ru">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* === GSun brand tweaks === */
+h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+.price-tag { display:flex; align-items:baseline; gap:6px; font-weight:800; font-size:28px; margin:6px 0 12px; }
+.price-tag small { font-weight:600; font-size:12px; color:#6b7280; }
+/* 3-колоночная сетка на десктопе */
+#package .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)) !important; gap:16px; }
+@media (max-width: 1024px){ #package .grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; } }
+@media (max-width: 640px){ #package .grid { grid-template-columns: 1fr !important; } }
+</style>
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -228,49 +240,68 @@
 
   <!-- Franchise package -->
   <section id="package" class="section">
-    <div class="container">
-      <h2>Пакеты франшизы</h2>
-      <p class="muted" style="margin-top:8px">Примерная конфигурация. Условия уточняются под ваш регион и профиль объектов.</p>
-      <div class="grid" style="margin-top:16px;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px">
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="check" style="width:16px;height:16px"></i> Start (50–100 кВт)</div></div>
-          <div class="card-content muted">
-            <ul class="disc">
-              <li>Айдентика и сайт‑лендинг</li>
-              <li>Шаблоны коммерческих и смет</li>
-              <li>Базовая поддержка монтажа</li>
-              <li>Мониторинг 1 объекта</li>
-              <li>Юр. пакет (RU)</li>
-            </ul>
-          </div>
+  <div class="container">
+    <h2>Пакеты франшизы</h2>
+    <p class="muted" style="margin-top:8px">Примерная конфигурация. Условия уточняются под ваш регион и профиль объектов.</p>
+
+    <div class="grid" style="margin-top:16px">
+      <!-- Start -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="rocket" style="width:16px;height:16px"></i> Start (50–100 кВт)</div>
         </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="check" style="width:16px;height:16px"></i> Pro (100–300 кВт)</div></div>
-          <div class="card-content muted">
-            <ul class="disc">
-              <li>Расширенный маркетинг‑пак</li>
-              <li>Техподдержка и аудит проекта</li>
-              <li>Мониторинг до 5 объектов</li>
-              <li>Верификация GSun (QR/NFT)</li>
-              <li>Обучение продажам B2B</li>
-            </ul>
-          </div>
+        <div class="card-content muted">
+          <div class="price-tag"><span>₽ 4 950 000</span> <small>единоразово</small></div>
+          <ul class="disc">
+            <li>Айдентика и сайт-лендинг</li>
+            <li>Шаблоны коммерческих и смет</li>
+            <li>Базовая поддержка монтажа</li>
+            <li>Мониторинг 1 объекта</li>
+            <li>Юр. пакет (RU)</li>
+          </ul>
         </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="check" style="width:16px;height:16px"></i> Enterprise (300–500+ кВт)</div></div>
-          <div class="card-content muted">
-            <ul class="disc">
-              <li>Личный кабинет B2B</li>
-              <li>Совместные PR‑кейсы</li>
-              <li>SLA по сервису и ТО</li>
-              <li>Поддержка сертификации (Verra/GS)</li>
-              <li>Архитектура под мульти‑локации</li>
-            </ul>
-          </div>
+        <div class="card-footer"><a class="btn primary" href="#contact">Оставить заявку</a></div>
+      </div>
+
+      <!-- Pro -->
+      <div class="card" style="border:2px solid var(--emerald)">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="zap" style="width:16px;height:16px"></i> Pro (100–200 кВт)</div>
         </div>
+        <div class="card-content muted">
+          <div class="price-tag"><span>₽ 8 990 000</span> <small>единоразово</small></div>
+          <ul class="disc">
+            <li>Система мониторинга + веб-доступ</li>
+            <li>MVP токенизации (Polygon, NFT-сертификат)</li>
+            <li>Методика учёта CO₂ (черновая Verra/GS)</li>
+            <li>Техподдержка, регламент ТО</li>
+            <li>ТО: ₽ 22 000 / квартал</li>
+          </ul>
+        </div>
+        <div class="card-footer"><a class="btn emerald" href="#contact">Стать партнёром</a></div>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="factory" style="width:16px;height:16px"></i> Enterprise (200–500+ кВт)</div>
+        </div>
+        <div class="card-content muted">
+          <div class="price-tag"><span>₽ 15 900 000</span> <small>единоразово</small></div>
+          <ul class="disc">
+            <li>Интеграция с ERP/биллингом</li>
+            <li>Модель CO₂-компенсации (Gold Standard/Verra-ready)</li>
+            <li>Личный кабинет B2B, SLA</li>
+            <li>Архитектура под мульти-локации</li>
+            <li>PR-поддержка на запуске</li>
+          </ul>
+        </div>
+        <div class="card-footer"><a class="btn outline" href="#contact">Запросить КП</a></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- Cases -->
   <section id="cases" class="section light">
@@ -288,6 +319,34 @@
             <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> 16.8 МВт·ч/мес (средняя генерация)</div>
             <div style="display:flex;align-items:center;gap:8px"><i data-lucide="leaf" style="width:16px;height:16px"></i> 12 т CO₂/мес (компенсация)</div>
             <div style="display:flex;align-items:center;gap:8px"><i data-lucide="map-pin" style="width:16px;height:16px"></i> ул. Калараша 36</div>
+          </div>
+        </div>
+		<div class="grid" style="margin-top:16px;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+              <span>Сочи, п. Лазаревское</span>
+              <span class="badge" style="background:#e5e7eb;color:#111827">50 кВт</span>
+            </div>
+          </div>
+          <div class="card-content muted" style="display:grid;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> 8.4 МВт·ч/мес (средняя генерация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="leaf" style="width:16px;height:16px"></i> 6 т CO₂/мес (компенсация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="map-pin" style="width:16px;height:16px"></i> ул. Калараша 131</div>
+          </div>
+        </div>
+		<div class="grid" style="margin-top:16px;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+              <span>Сочи, п. Лазаревское</span>
+              <span class="badge" style="background:#e5e7eb;color:#111827">50 кВт</span>
+            </div>
+          </div>
+          <div class="card-content muted" style="display:grid;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> 8.4 МВт·ч/мес (средняя генерация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="leaf" style="width:16px;height:16px"></i> 6 т CO₂/мес (компенсация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="map-pin" style="width:16px;height:16px"></i> ул. Павлова 2</div>
           </div>
         </div>
 
@@ -394,7 +453,7 @@
           <div style="font-weight:600;margin-bottom:6px">Контакты</div>
           <div>ИП Удодов Александр Федорович</div>
           <div>ИНН: 615425089014</div>
-          <div>E-mail: hello@greensun.example</div>
+          <div>E-mail: Support@greensun.energy</div>
         </div>
         <div>
           <div style="font-weight:600;margin-bottom:6px">Документы</div>
