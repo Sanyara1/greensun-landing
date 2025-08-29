@@ -261,9 +261,11 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       <div>
         <label>Центр расчёта</label>
         <select id="radiusCenter" class="input">
-          <option value="k36">ул. Калараша 36</option>
-          <option value="p2">ул. Павлова 2</option>
-          <option value="k131">ул. Калараша 131</option>
+          <option value="pavlova2">Сочи, Лазаревское — Павлова, 2</option>
+          <option value="kalarasha131">Сочи, Лазаревское — Калараша, 131</option>
+          <option value="kalarasha36">Сочи, Лазаревское — Калараша, 36</option>
+          <option value="pilot_center">Лазаревское — центр (пилот)</option>
+          <option value="pilot_shosse2">Сочинское ш., 2 (пилот)</option>
         </select>
       </div>
       <div>
@@ -618,9 +620,11 @@ const GSUN_OBJECTS_ENDPOINT = window.GSUN_OBJECTS_ENDPOINT || '/api/objects.json
 
 /* ====== Fallback objects ====== */
 let GS_OBJECTS = [
-  { id:'k36',  name:'ул. Калараша 36',  lat:43.9100, lon:39.3300, mwh:16.8, kw:100 },
-  { id:'p2',   name:'ул. Павлова 2',    lat:43.9030, lon:39.3220, mwh:16.8, kw:100 },
-  { id:'k131', name:'ул. Калараша 131', lat:43.9140, lon:39.3400, mwh:16.8, kw:100 },
+  { id:'pavlova2',     name:'Сочи, Лазаревское — Павлова, 2',    lat:43.905583, lon:39.326725, mwh:16.8, kw:100 },
+  { id:'kalarasha131', name:'Сочи, Лазаревское — Калараша, 131', lat:43.912564, lon:39.339149, mwh:16.8, kw:100 },
+  { id:'kalarasha36',  name:'Сочи, Лазаревское — Калараша, 36',  lat:43.906505, lon:39.332079, mwh:16.8, kw:100 },
+  { id:'pilot_center', name:'Лазаревское — центр (пилот)',       lat:43.908900, lon:39.331400, mwh:8.4, kw:50 },
+  { id:'pilot_shosse2',name:'Сочинское ш., 2 (пилот)',           lat:43.901848, lon:39.340613, mwh:8.4, kw:50 }
 ];
 
 /* ====== Load from monitoring (optional) ====== */
