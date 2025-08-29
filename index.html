@@ -33,6 +33,38 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
 #map .map > *{ position:relative; z-index:1; }
 #map .chip, #map .btn{ position:relative; z-index:2; }
 
+
+/* Segmented control for Franchise */
+.seg { display:inline-flex; gap:8px; background:#f3f4f6; padding:6px; border-radius:12px; border:1px solid #e5e7eb }
+.seg-btn { border:0; background:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer }
+.seg-btn.is-active { background: var(--emerald, #18A957); color:#fff; box-shadow: 0 0 0 2px rgba(24,169,87,.15) inset }
+.seg-btn:focus-visible { outline:2px solid var(--emerald, #18A957); outline-offset:2px }
+/* Highlight for chosen card */
+.franch-card.is-highlighted { border:2px solid var(--emerald, #18A957); box-shadow: 0 10px 28px rgba(24,169,87,.15) }
+
+
+/* Franchise segmented control + highlight */
+.seg { display:inline-flex; gap:8px; background:#f3f4f6; padding:6px; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:12px }
+.seg-btn { border:0; background:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer }
+.seg-btn.is-active { background: var(--emerald, #18A957); color:#fff; box-shadow: 0 0 0 2px rgba(24,169,87,.15) inset }
+.seg-btn:focus-visible { outline:2px solid var(--emerald, #18A957); outline-offset:2px }
+/* Highlight for chosen card */
+#package .card.is-highlighted { border:2px solid var(--emerald, #18A957) !important; box-shadow: 0 10px 28px rgba(24,169,87,.15) !important; }
+/* Modal */
+.modal{ position:fixed; inset:0; background:rgba(17,24,39,.5); display:none; align-items:center; justify-content:center; padding:16px; z-index:50 }
+.modal.is-open{ display:flex }
+.modal-card{ width:min(680px, 96vw); background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 20px 60px rgba(0,0,0,.2); overflow:hidden }
+.modal-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #e5e7eb }
+.modal-title{ font-weight:800; font-size:18px }
+.modal-close{ border:0; background:#fff; padding:8px; border-radius:8px; cursor:pointer }
+.modal-body{ padding:16px }
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+@media (max-width:720px){ .grid-2{ grid-template-columns:1fr } }
+.input, .textarea{ width:100%; border:1px solid #d1d5db; border-radius:10px; padding:10px 12px; font:inherit }
+.textarea{ min-height:90px; resize:vertical }
+.modal-foot{ padding:16px; border-top:1px solid #e5e7eb; display:flex; align-items:center; justify-content:flex-end; gap:10px }
+.badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#F9FAFB; border:1px solid #e5e7eb; font-size:12px }
+
 </style>
 
 <head>
@@ -318,9 +350,15 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
     <h2>Пакеты франшизы</h2>
     <p class="muted" style="margin-top:8px">Примерная конфигурация. Условия уточняются под ваш регион и профиль объектов.</p>
 
-    <div class="grid" style="margin-top:16px">
+    
+<div class="seg" id="franchTabs" role="tablist" aria-label="Франшизы">
+  <button class="seg-btn" role="tab" aria-selected="true" aria-controls="pack-pro" data-target="pro">Pro</button>
+  <button class="seg-btn" role="tab" aria-selected="false" aria-controls="pack-start" data-target="start">Start</button>
+  <button class="seg-btn" role="tab" aria-selected="false" aria-controls="pack-enterprise" data-target="enterprise">Enterprise</button>
+</div>
+<div class="grid" style="margin-top:16px">
       <!-- Start -->
-      <div class="card">
+      <div class="card" id="pack-start" data-pack="start">
         <div class="card-header">
           <div class="card-title"><i data-lucide="rocket" style="width:16px;height:16px"></i> Start (50–100 кВт)</div>
         </div>
@@ -356,7 +394,7 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       </div>
 
       <!-- Enterprise -->
-      <div class="card">
+      <div class="card" id="pack-pro" data-pack="pro">
         <div class="card-header">
           <div class="card-title"><i data-lucide="factory" style="width:16px;height:16px"></i> Enterprise (200–500+ кВт)</div>
         </div>
@@ -773,6 +811,189 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const live = detectMapCenter();
   if (live) setManualCenter(live); else recalcRadius();
 });
+</script>
+
+
+<script>
+// Franchise tabs highlight
+(function(){
+  const tabs = document.querySelectorAll('#franchTabs .seg-btn');
+  const cards = document.querySelectorAll('.franch-card[data-pack]');
+  function activate(target){
+    tabs.forEach(b=>{
+      const on = b.dataset.target===target;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-selected', String(on));
+      b.setAttribute('aria-pressed', String(on));
+    });
+    cards.forEach(c=>c.classList.toggle('is-highlighted', c.dataset.pack===target));
+    document.getElementById('pack-'+target)?.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  }
+  tabs.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.target)));
+  // default: Pro highlighted
+  activate('pro');
+})();
+</script>
+
+
+<!-- Lead Modal -->
+<div id="leadModal" class="modal" aria-hidden="true" aria-labelledby="leadTitle">
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div class="modal-title" id="leadTitle">Заявка на франшизу</div>
+      <button class="modal-close" type="button" aria-label="Закрыть" id="leadClose">✕</button>
+    </div>
+    <form id="leadForm">
+      <div class="modal-body">
+        <div class="badge">Пакет: <b id="leadPackLabel">—</b></div>
+        <input type="hidden" name="package" id="leadPack" value=""/>
+        <div class="grid-2" style="margin-top:12px">
+          <div>
+            <label>Имя</label>
+            <input class="input" name="name" id="leadName" required placeholder="Иван Петров">
+          </div>
+          <div>
+            <label>Телефон</label>
+            <input class="input" name="phone" id="leadPhone" required placeholder="+7 999 123‑45‑67">
+          </div>
+          <div>
+            <label>Email</label>
+            <input class="input" type="email" name="email" id="leadEmail" required placeholder="name@example.com">
+          </div>
+          <div>
+            <label>Компания (необязательно)</label>
+            <input class="input" name="company" id="leadCompany" placeholder="ООО «...»">
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <label>Комментарий</label>
+          <textarea class="textarea" name="message" id="leadMsg" placeholder="Коротко опишите задачу"></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn" id="leadCancel">Отмена</button>
+        <button type="submit" class="btn primary" id="leadSubmit">Отправить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+// Franchise tabs highlight for current markup
+(function(){
+  const tabs = document.querySelectorAll('#franchTabs .seg-btn');
+  const cards = {
+    start: document.getElementById('pack-start'),
+    pro: document.getElementById('pack-pro'),
+    enterprise: document.getElementById('pack-enterprise')
+  };
+  function activate(target){
+    tabs.forEach(b=>{
+      const on = b.dataset.target===target;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+    Object.entries(cards).forEach(([k,el])=>{
+      if (el) el.classList.toggle('is-highlighted', k===target);
+    });
+    if (cards[target]) cards[target].scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+  tabs.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.target)));
+  activate('pro');
+})();
+
+// Modal lead form
+(function(){
+  const modal = document.getElementById('leadModal');
+  const packLabel = document.getElementById('leadPackLabel');
+  const packInput  = document.getElementById('leadPack');
+  const closeBtn = document.getElementById('leadClose');
+  const cancelBtn = document.getElementById('leadCancel');
+  const form = document.getElementById('leadForm');
+  const submitBtn = document.getElementById('leadSubmit');
+  const OWNER_EMAIL = document.body?.dataset?.ownerEmail || 'owner@example.com'; // set your email via <body data-owner-email="you@...">
+  const FORMS_ENDPOINT = window.FORMS_ENDPOINT || window.GSUN_FORMS_ENDPOINT || ''; // e.g. 'https://formspree.io/f/xxxx'
+
+  function openModal(pack){
+    packLabel.textContent = pack;
+    packInput.value = pack;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden','false');
+    setTimeout(()=>document.getElementById('leadName')?.focus(), 50);
+  }
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+  }
+  [closeBtn, cancelBtn].forEach(el=>el?.addEventListener('click', closeModal));
+  modal.addEventListener('click', (e)=>{ if (e.target===modal) closeModal(); });
+
+  // Hook all CTA buttons in #package
+  document.querySelectorAll('#package .card').forEach(card=>{
+    const pack = card.dataset.pack || card.querySelector('.card-title')?.textContent || 'Franchise';
+    card.querySelectorAll('.card-footer a.btn, .card-footer a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        if (a.getAttribute('href')?.startsWith('#') || a.getAttribute('href')?.endsWith('.pdf') || a.getAttribute('href')==='#contact'){
+          e.preventDefault();
+        }
+        openModal(pack);
+      });
+    });
+  });
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправка…';
+
+    const payload = {
+      package: packInput.value,
+      name: form.name.value,
+      phone: form.phone.value,
+      email: form.email.value,
+      company: form.company.value,
+      message: form.message.value,
+      page: location.href,
+      when: new Date().toISOString()
+    };
+
+    try{
+      if (FORMS_ENDPOINT){
+        const r = await fetch(FORMS_ENDPOINT, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) throw new Error('Form endpoint error');
+        alert('Заявка отправлена! Мы свяжемся с вами.');
+        closeModal();
+      } else {
+        const subject = encodeURIComponent(`[Greensun] Заявка: ${payload.package}`);
+        const body = encodeURIComponent(
+          `Пакет: ${payload.package}
+Имя: ${payload.name}
+Телефон: ${payload.phone}
+Email: ${payload.email}
+Компания: ${payload.company}
+Сообщение: ${payload.message}
+Страница: ${payload.page}
+Время: ${payload.when}`
+        );
+        window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
+        closeModal();
+      }
+    }catch(err){
+      console.error(err);
+      alert('Не удалось отправить. Попробуйте ещё раз или напишите нам по email.');
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Отправить';
+    }
+  });
+
+  window.openLeadModal = openModal;
+})();
 </script>
 
 </body>
