@@ -2,7 +2,6 @@
 <html lang="ru">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap" rel="stylesheet">
 <style>
-
 /* === GREENSUN · CASES (build) === */
 .gs-cases{ padding: 48px 20px; background: transparent; }
 .gs-cases .gs-container{ max-width: 1200px; margin: 0 auto; }
@@ -17,7 +16,6 @@
 .gs-case-stats{ display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 8px; }
 .gs-pill{ background: rgba(24,169,87,.10); color: var(--deep-teal, #0E3B2E); border: 1px solid rgba(24,169,87,.22); padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; }
 .gs-case-addr{ color:#374151; font-size:14px; }
-
 /* === GSun brand tweaks === */
 h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 .price-tag { display:flex; align-items:baseline; gap:6px; font-weight:800; font-size:28px; margin:6px 0 12px; }
@@ -26,14 +24,11 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
 #package .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)) !important; gap:16px; }
 @media (max-width: 1024px){ #package .grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; } }
 @media (max-width: 640px){ #package .grid { grid-template-columns: 1fr !important; } }
-
 /* === Map overlay click-through fix === */
 #map .map{ position:relative; }
 #map .map::after{ pointer-events:none; z-index:0; }
 #map .map > *{ position:relative; z-index:1; }
 #map .chip, #map .btn{ position:relative; z-index:2; }
-
-
 /* Segmented control for Franchise */
 .seg { display:inline-flex; gap:8px; background:#f3f4f6; padding:6px; border-radius:12px; border:1px solid #e5e7eb }
 .seg-btn { border:0; background:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer }
@@ -41,8 +36,6 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
 .seg-btn:focus-visible { outline:2px solid var(--emerald, #18A957); outline-offset:2px }
 /* Highlight for chosen card */
 .franch-card.is-highlighted { border:2px solid var(--emerald, #18A957); box-shadow: 0 10px 28px rgba(24,169,87,.15) }
-
-
 /* Franchise segmented control + highlight */
 .seg { display:inline-flex; gap:8px; background:#f3f4f6; padding:6px; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:12px }
 .seg-btn { border:0; background:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer }
@@ -65,22 +58,40 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
 .modal-foot{ padding:16px; border-top:1px solid #e5e7eb; display:flex; align-items:center; justify-content:flex-end; gap:10px }
 .badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#F9FAFB; border:1px solid #e5e7eb; font-size:12px }
 
-</style>
+/* === Состояние "Занято" для чипов на карте === */
+.chip.occupied {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.chip.occupied > div:first-child {
+  background: #ef4444;
+}
 
+/* === Анимация и стиль для карточек франшиз === */
+#package .card {
+  opacity: 0.6;
+  filter: grayscale(80%);
+  pointer-events: none;
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+#package .card.is-highlighted {
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+</style>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Greensun — Франшиза солнечных станций</title>
-  <meta name="description" content="Франшиза солнечных станций под ключ: проектирование, монтаж, мониторинг и цифровая верификация энергии через GSun."/>
-
+  <meta name="description" content="Франшиза солнечных станций под ключ: проектирование, монтаж, мониторинг и цифровая верификация энергии через GNSun."/>
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <!-- Icons (lucide) -->
   <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-
   <style>
     :root{
       --gold:#FFC83A;
@@ -142,7 +153,7 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="hex" id="hex-28"></span>
         <span style="font-weight:600;letter-spacing:.02em;">Greensun</span>
-        <span class="badge">GSun</span>
+        <span class="badge">GNSun</span>
       </div>
       <nav class="nav" style="display:none;gap:20px;align-items:center" id="nav-desktop">
         <a href="#how">Как это работает</a>
@@ -158,7 +169,6 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       </div>
     </div>
   </header>
-
   <!-- Hero -->
   <section class="section light">
     <div class="container">
@@ -166,7 +176,7 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
         <div>
           <h1>Франшиза солнечных станций <span style="color:var(--emerald)">«под ключ»</span></h1>
           <p class="lead" style="margin-top:16px">
-            Полный цикл: проектирование, монтаж, мониторинг и цифровая верификация происхождения энергии через токен <b>GSun</b> (Polygon).
+            Полный цикл: проектирование, монтаж, мониторинг и цифровая верификация происхождения энергии через токен <b>GNSun</b> (Polygon).
             Чистая генерация + понятная экономика для B2B-объектов.
           </p>
           <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px">
@@ -198,7 +208,6 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
           </div>
           <div class="tiny" style="margin-top:6px">*по действующим станциям в Сочи</div>
         </div>
-
         <div id="unit">
           <div class="card">
             <div class="card-header">
@@ -241,11 +250,9 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
-
   <!-- How it works -->
   <section id="how" class="section">
     <div class="container">
@@ -277,80 +284,102 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       </div>
     </div>
   </section>
+<!-- Map -->
+<section id="map" class="section light">
+  <div class="container">
+    <h2>Карта присутствия</h2>
+    <p class="muted" style="margin-top:8px">Запущено в Сочи. Открыты к пилотам в новых регионах.</p>
 
-  <!-- Map -->
-  <section id="map" class="section light">
-    <div class="container">
-      <h2>Карта присутствия</h2>
-      <p class="muted" style="margin-top:8px">Запущено в Сочи. Открыты к пилотам в новых регионах.</p>
-      <div class="map">
-        <div class="chip" data-lat="43.908" data-lon="39.330" style="position:absolute;left:54%;top:49%;transform:translate(-50%,-50%);">
-          <div style="width:10px;height:10px;border-radius:999px;background:var(--emerald)"></div>
+    <!-- Обертка в 2 колонки -->
+    <div class="grid" style="margin-top:24px; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start;">
 
-<!-- Радиус 5 км: совокупная генерация (для Pro) -->
-<div class="card" id="pro-radius-card" style="margin-top:16px">
-  <div class="card-header">
-    <div class="card-title" style="display:flex;align-items:center;gap:8px">
-      <i data-lucide="target" style="width:18px;height:18px"></i>
-      Радиус: совокупная генерация
-    </div>
+      <!-- Колонка 1: Карта -->
+      <div class="map-container" style="position: relative; border-radius:16px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+        <div class="map" style="
+  background-image: url('https://images.unsplash.com/photo-1579547945413-497e1b99dac0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  height: 440px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+">
+  <!-- Занятый чип -->
+  <div class="chip occupied" data-lat="43.908" data-lon="39.330" style="position:absolute;left:54%;top:49%;transform:translate(-50%,-50%); z-index: 2;">
+    <div style="width:10px;height:10px;border-radius:999px;background:var(--emerald)"></div>
+    <div class="tiny" style="color:#374151;font-size:12px; white-space: nowrap;">Сочи — п. Лазаревское</div>
   </div>
-  <div class="card-content">
-    <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
-      <div>
-        <label>Центр расчёта</label>
-        <select id="radiusCenter" class="input">
-          <option value="pavlova2">Сочи, Лазаревское — Павлова, 2</option>
-          <option value="kalarasha131">Сочи, Лазаревское — Калараша, 131</option>
-          <option value="kalarasha36">Сочи, Лазаревское — Калараша, 36</option>
-          <option value="pilot_center">Лазаревское — центр (пилот)</option>
-          <option value="pilot_shosse2">Сочинское ш., 2 (пилот)</option>
-        </select>
-      </div>
-      <div>
-        <label>Радиус (км)</label>
-        <input id="radiusKm" class="input" type="number" min="1" max="20" step="0.5" value="5"/>
-      </div>
-    </div>
-
-    <div class="grid" style="margin-top:12px; grid-template-columns:1fr 1fr 1fr; gap:12px">
-      <label class="pill" style="display:flex;align-items:center;gap:8px">
-        <input id="useMapCenter" type="checkbox"> Брать центр с карты
-      </label>
-      <label class="pill" style="display:flex;align-items:center;gap:8px">
-        <input id="excludeSelf" type="checkbox" checked> Исключить свой объект
-      </label>
-      <button id="syncMapCenter" class="btn outline" type="button">Синхронизировать</button>
-    </div>
-
-    <div class="tiny" style="margin-top:6px">
-      Центр: <b><span id="centerLat">—</span>, <span id="centerLon">—</span></b>
-    </div>
-
-    <div class="grid" style="margin-top:12px; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px">
-      <div class="pill">Объектов: <b><span id="rCount">—</span></b></div>
-      <div class="pill">Сумма: <b><span id="rMWh">—</span> МВт·ч/мес</b></div>
-      <div class="pill">Доля Pro 10%: <b><span id="rProMWh">—</span> МВт·ч/мес</b></div>
-      <div class="pill">Начисления*: <b><span id="rProRub">—</span> ₽/мес</b></div>
-    </div>
-    <div class="tiny" style="margin-top:6px">*По текущему тарифу в калькуляторе выше.</div>
+  <!-- Подсказка внизу карты -->
+  <div class="tiny" style="position:absolute;left:16px;bottom:14px;background:#ffffffcc;border:1px solid #e5e7eb;padding:6px 10px;border-radius:8px; backdrop-filter: blur(4px);">
+    Готовы к подключению франчайзи в вашем регионе → оставьте заявку
   </div>
 </div>
-
-          <div class="tiny" style="color:#374151;font-size:12px">Сочи — п. Лазаревское · 100 кВт</div>
-        </div>
-        <div class="tiny" style="position:absolute;left:16px;bottom:14px;background:#ffffffcc;border:1px solid #e5e7eb;padding:6px 10px;border-radius:8px">Готовы к подключению франчайзи в вашем регионе → оставьте заявку</div>
       </div>
-    </div>
-  </section>
 
+      <!-- Колонка 2: Блок "Радиус: совокупная генерация" -->
+      <div class="card" id="pro-radius-card" style="flex-shrink:0; position: sticky; top: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
+        <div class="card-header">
+          <div class="card-title" style="display:flex;align-items:center;gap:8px">
+            <i data-lucide="target" style="width:18px;height:18px"></i>
+            Радиус: совокупная генерация
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
+            <div>
+              <label>Центр расчёта</label>
+              <select id="radiusCenter" class="input" style="font-size: 14px;">
+                <option value="pavlova2">Сочи, Лазаревское — Павлова, 2</option>
+                <option value="kalarasha131">Сочи, Лазаревское — Калараша, 131</option>
+                <option value="kalarasha36">Сочи, Лазаревское — Калараша, 36</option>
+                <option value="pilot_center">Лазаревское — центр (пилот)</option>
+                <option value="pilot_shosse2">Сочинское ш., 2 (пилот)</option>
+              </select>
+            </div>
+            <div>
+              <label>Радиус (км)</label>
+              <input id="radiusKm" class="input" type="number" min="1" max="20" step="0.5" value="5" style="font-size: 14px;"/>
+            </div>
+          </div>
+          <div class="grid" style="margin-top:12px; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+            <label class="pill" style="display:flex;align-items:center;gap:6px; font-size: 13px; padding: 8px;">
+              <input id="useMapCenter" type="checkbox"> Брать центр с карты
+            </label>
+            <label class="pill" style="display:flex;align-items:center;gap:6px; font-size: 13px; padding: 8px;">
+              <input id="excludeSelf" type="checkbox" checked> Исключить свой объект
+            </label>
+            <button id="syncMapCenter" class="btn outline" type="button" style="font-size: 13px; padding: 8px 10px;">Синхронизировать</button>
+          </div>
+          <div class="tiny" style="margin-top:8px; font-size: 12px;">
+            Центр: <b><span id="centerLat">—</span>, <span id="centerLon">—</span></b>
+          </div>
+          <div class="grid" style="margin-top:12px; grid-template-columns:1fr 1fr; gap:8px;">
+            <div class="pill" style="padding: 10px; font-size: 13px;">
+              Объектов: <b><span id="rCount">—</span></b>
+            </div>
+            <div class="pill" style="padding: 10px; font-size: 13px;">
+              Сумма: <b><span id="rMWh">—</span> МВт·ч/мес</b>
+            </div>
+            <div class="pill" style="padding: 10px; font-size: 13px;">
+              Доля Pro 10%: <b><span id="rProMWh">—</span> МВт·ч/мес</b>
+            </div>
+            <div class="pill" style="padding: 10px; font-size: 13px;">
+              Начисления*: <b><span id="rProRub">—</span> ₽/мес</b>
+            </div>
+          </div>
+          <div class="tiny" style="margin-top:8px; font-size: 12px;">*По текущему тарифу в калькуляторе выше.</div>
+        </div>
+      </div>
+
+    </div> <!-- Конец grid-обертки -->
+  </div>
+</section>
   <!-- Franchise package -->
   <section id="package" class="section">
   <div class="container">
     <h2>Пакеты франшизы</h2>
     <p class="muted" style="margin-top:8px">Примерная конфигурация. Условия уточняются под ваш регион и профиль объектов.</p>
-
-    
 <div class="seg" id="franchTabs" role="tablist" aria-label="Франшизы">
   <button class="seg-btn" role="tab" aria-selected="true" aria-controls="pack-pro" data-target="pro">Pro</button>
   <button class="seg-btn" role="tab" aria-selected="false" aria-controls="pack-start" data-target="start">Start</button>
@@ -370,13 +399,13 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
             <li>Базовая поддержка монтажа</li>
             <li>Мониторинг 1 объекта</li>
             <li>Юр. пакет (RU)</li>
+			<li>Комплект оборудования на 50 кВТ</li>
           </ul>
         </div>
         <div class="card-footer"><a class="btn primary" href="#contact">Оставить заявку</a></div>
       </div>
-
       <!-- Pro -->
-      <div class="card" style="border:2px solid var(--emerald)">
+      <div class="card" id="pack-pro" data-pack="pro">
         <div class="card-header">
           <div class="card-title"><i data-lucide="zap" style="width:16px;height:16px"></i> Pro (100–200 кВт)</div>
         </div>
@@ -388,13 +417,16 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
             <li>Методика учёта CO₂ (черновая Verra/GS)</li>
             <li>Техподдержка, регламент ТО</li>
             <li>ТО: ₽ 22 000 / квартал</li>
+			<li>Комплект оборудования на 100 кВТ</li>
           </ul>
+
+          
+
         </div>
         <div class="card-footer"><a class="btn emerald" href="#contact">Стать партнёром</a></div>
       </div>
-
       <!-- Enterprise -->
-      <div class="card" id="pack-pro" data-pack="pro">
+      <div class="card" id="pack-enterprise" data-pack="enterprise">
         <div class="card-header">
           <div class="card-title"><i data-lucide="factory" style="width:16px;height:16px"></i> Enterprise (200–500+ кВт)</div>
         </div>
@@ -406,6 +438,7 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
             <li>Личный кабинет B2B, SLA</li>
             <li>Архитектура под мульти-локации</li>
             <li>PR-поддержка на запуске</li>
+			<li>Комплект оборудования на 200 кВТ</li>
           </ul>
         </div>
         <div class="card-footer"><a class="btn outline" href="#contact">Запросить КП</a></div>
@@ -413,8 +446,6 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
     </div>
   </div>
 </section>
-
-
   <!-- Cases -->
   <section id="cases" class="section light">
     <div class="container">
@@ -461,24 +492,22 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
             <div style="display:flex;align-items:center;gap:8px"><i data-lucide="map-pin" style="width:16px;height:16px"></i> ул. Павлова 2</div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header">
             <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
-              <span>Отель — гибридная схема</span>
-              <span class="badge" style="background:#e5e7eb;color:#111827">50 кВт</span>
+              <span>Сочи Аше</span>
+              <span class="badge" style="background:#e5e7eb;color:#111827">20 кВт</span>
             </div>
           </div>
           <div class="card-content muted" style="display:grid;gap:6px">
-            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> ~8.4 МВт·ч/мес (модель)</div>
-            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="shield" style="width:16px;height:16px"></i> Мониторинг + сервис (квартальный)</div>
-            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="qrcode" style="width:16px;height:16px"></i> QR-страница верификации энергии</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> ~4 МВт·ч/мес (модель)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="shield" style="width:16px;height:16px"></i> 2.7 т CO₂/мес (компенсация)</div>
+            <div style="display:flex;align-items:center;gap:8px"><i data-lucide="qrcode" style="width:16px;height:16px"></i> Репина 4а</div>
           </div>
         </div>
       </div>
     </div>
   </section>
-
   <!-- CTA + Form -->
   <section id="cta" class="section" style="background:var(--teal);color:#fff">
     <div class="container">
@@ -521,7 +550,6 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       </div>
     </div>
   </section>
-
   <!-- FAQ -->
   <section id="faq" class="section">
     <div class="container">
@@ -547,43 +575,114 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
           <button class="accordion-trigger">Какие пакеты и условия франшизы?</button>
           <div class="accordion-content">Доступны уровни Start / Pro / Enterprise. Размеры паушального взноса и роялти зависят от региона и мощности. Условия согласуются индивидуально и не являются публичной офертой.</div>
         </div>
+
+        <!-- Вопросы о токеномике -->
+        <div class="accordion-item">
+          <button class="accordion-trigger">Что такое токен GSun (GEN) и как он работает?</button>
+          <div class="accordion-content">
+            <b>GSun (GEN)</b> — это утилитарный токен, который служит двум целям:
+            <ol style="padding-left: 18px; margin: 8px 0;">
+              <li><b>Вознаграждение:</b> Вы получаете GEN за каждую произведенную киловатт-час чистой энергии. Он распределяется по цепочке: 70% установщику, 20% региональному представителю, 10% мастер-франчайзи.</li>
+              <li><b>Управление:</b> Владельцы GEN могут голосовать за ключевые решения в экосистеме, такие как изменение тарифов или подключение новых регионов.</li>
+            </ol>
+            GEN можно стейкать для получения дополнительных токенов или продавать на децентрализованных биржах.
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Как я могу монетизировать энергию кроме продажи электричества?</button>
+          <div class="accordion-content">
+            Помимо прямой экономии на счетах за электричество, вы можете монетизировать вашу "зеленую" энергию через:
+            <ul style="padding-left: 18px; margin: 8px 0;">
+              <li><b>eKWH-токены:</b> Продавайте их компаниям, которым нужно подтвердить использование "зеленой" энергии для своей ESG-отчетности.</li>
+              <li><b>Углеродные кредиты (NFT):</b> Конвертируйте ваши eKWH в NFT-сертификаты, подтверждающие предотвращенный выброс CO₂. Эти сертификаты можно продать на международных рынках компенсации углеродного следа по более высокой цене.</li>
+            </ul>
+            Это превращает вашу солнечную станцию в многоуровневый источник дохода.
+          </div>
+        </div>
+        <!-- Конец вопросов -->
+
       </div>
     </div>
   </section>
-
   <!-- Footer -->
-  <footer>
-    <div class="container" style="padding:36px 0">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <span class="hex" id="hex-20"></span>
-        <span style="font-weight:600">Greensun</span>
-        <span class="badge" style="background:#e5e7eb;color:#111827">GSun</span>
-      </div>
-      <div class="grid" style="grid-template-columns:1fr;gap:18px">
-        <div>Утилитарная верификация происхождения энергии и CO₂ на Polygon. Без обещаний доходности.</div>
-        <div>
-          <div style="font-weight:600;margin-bottom:6px">Контакты</div>
-          <div>ИП Удодов Александр Федорович</div>
-          <div>ИНН: 615425089014</div>
-          <div>E-mail: Support@greensun.energy</div>
-        </div>
-        <div>
-          <div style="font-weight:600;margin-bottom:6px">Документы</div>
-          <ul style="display:grid;gap:6px;padding-left:0;list-style:none">
-            <li><a class="underline" href="#">Brandbook (RU/EN)</a></li>
-            <li><a class="underline" href="#">Презентация</a></li>
-            <li><a class="underline" href="#">Юридический меморандум</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="tiny" style="margin-top:16px">© <span id="year"></span> Greensun. Все права защищены.</div>
+<footer>
+  <div class="container" style="padding:48px 0; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px">
+      <span class="hex" id="hex-20"></span>
+      <span style="font-weight:600; font-size: 20px;">Greensun</span>
+      <span class="badge" style="background:#e5e7eb;color:#111827; font-size: 12px;">GNSun</span>
     </div>
-  </footer>
 
+    <div class="grid" style="grid-template-columns:1fr;gap:32px; margin-bottom: 32px;">
+      <div>
+        <p style="color: #374151; line-height: 1.6; max-width: 600px;">
+          Утилитарная верификация происхождения энергии и CO₂ на Polygon. Без обещаний доходности.
+        </p>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 1fr; gap:32px;">
+        <!-- Контакты -->
+        <div>
+          <div style="font-weight:600; margin-bottom:16px; color: #111827;">Контакты</div>
+          <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: #374151;">
+            <div>ИП Удодов Александр Федорович</div>
+            <div>ИНН: 615425089014</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+              <a href="mailto:Support@greensun.energy" style="color: #18A957; text-decoration: none;">Support@greensun.energy</a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="phone" style="width: 18px; height: 18px;"></i>
+              <a href="tel:+79288117722" style="color: #18A957; text-decoration: none;">+7 (928) 811-77-22</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Мессенджеры + QR-код -->
+        <div>
+          <div style="font-weight:600; margin-bottom:16px; color: #111827;">Свяжитесь мгновенно</div>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/79288117722" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; text-decoration: none; font-weight: 600; transition: all 0.2s ease;">
+              <i data-lucide="message-circle" style="width: 20px; height: 20px; color: #166534;"></i>
+              WhatsApp
+            </a>
+            <!-- Telegram -->
+            <a href="https://t.me/Fantai_main" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; background: #f0f9ff; border: 1px solid #bae6fd; color: #086594; text-decoration: none; font-weight: 600; transition: all 0.2s ease;">
+              <i data-lucide="send" style="width: 20px; height: 20px; color: #086594;"></i>
+              Telegram
+            </a>
+            <!-- QR-код -->
+            <div style="margin-top: 8px;">
+              <div style="font-size: 13px; color: #6b7280; margin-bottom: 8px;">Сканируйте QR-код:</div>
+              <div style="background: white; padding: 12px; border-radius: 12px; display: inline-block; border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <!-- Простой placeholder QR-кода. Замените на реальный URL -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://greensun.energy" alt="QR-код Greensun" style="width: 120px; height: 120px; display: block;">
+                <div class="tiny" style="text-align: center; margin-top: 6px;">Перейти на сайт</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:600; margin-bottom:16px; color: #111827;">Документы</div>
+        <ul style="display:grid;gap:6px;padding-left:0;list-style:none; font-size: 14px;">
+          <li><a class="underline" href="#" style="color: #18A957; text-decoration: none;">Brandbook (RU/EN)</a></li>
+          <li><a class="underline" href="#" style="color: #18A957; text-decoration: none;">Презентация</a></li>
+          <li><a class="underline" href="#" style="color: #18A957; text-decoration: none;">Юридический меморандум</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tiny" style="margin-top:16px; padding-top: 16px; border-top: 1px solid #e5e7eb; color: #6b7280; text-align: center;">
+      © <span id="year"></span> Greensun. Все права защищены.
+    </div>
+  </div>
+</footer>
   <script>
     // Simple helpers
     const $ = (s)=>document.querySelector(s);
-
     // Hex "G" logo
     function renderHex(el, size=28, fill=getComputedStyle(document.documentElement).getPropertyValue('--gold').trim(), bg='transparent'){
       const s=size, cx=s/2, cy=s/2, R=s*0.40;
@@ -601,10 +700,8 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       '</svg>';
     }
     renderHex($('#hex-28'),28); renderHex($('#hex-20'),20);
-
     // Icons
     document.addEventListener('DOMContentLoaded',()=>{ if (window.lucide) lucide.createIcons(); });
-
     // Calculator
     const monthKWhPerKW = 168;
     function recalc(){
@@ -626,13 +723,11 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
     }
     ['capacityKW','tariff','insolation','projectCost'].forEach(id=>$('#'+id).addEventListener('input', recalc));
     recalc();
-
     // Accordion
     document.querySelectorAll('.accordion-item').forEach(item=>{
       const btn = item.querySelector('.accordion-trigger');
       btn.addEventListener('click', ()=> item.classList.toggle('open'));
     });
-
     // Lead form (mock)
     $('#submitLead').addEventListener('click', ()=>{
       const payload = {
@@ -647,10 +742,8 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
       console.log('[mock submit]', payload);
       $('#leadNote').textContent = 'Спасибо! Мы свяжемся с вами в ближайшее время.';
     });
-
     // Footer year
     $('#year').textContent = new Date().getFullYear();
-
     // Tiny responsive niceties
     function onResize(){
       const nav = $('#nav-desktop');
@@ -658,11 +751,9 @@ h1, h2, h3, .display, .card-title { font-family: Manrope, Inter, system-ui, -app
     }
     window.addEventListener('resize', onResize); onResize();
   </script>
-
 <script>
 /* ====== CONFIG: monitoring endpoint (override with window.GSUN_OBJECTS_ENDPOINT before this script) ====== */
 const GSUN_OBJECTS_ENDPOINT = window.GSUN_OBJECTS_ENDPOINT || '/api/objects.json';
-
 /* ====== Fallback objects ====== */
 let GS_OBJECTS = [
   { id:'pavlova2',     name:'Сочи, Лазаревское — Павлова, 2',    lat:43.905583, lon:39.326725, mwh:16.8, kw:100 },
@@ -671,7 +762,6 @@ let GS_OBJECTS = [
   { id:'pilot_center', name:'Лазаревское — центр (пилот)',       lat:43.908900, lon:39.331400, mwh:8.4, kw:50 },
   { id:'pilot_shosse2',name:'Сочинское ш., 2 (пилот)',           lat:43.901848, lon:39.340613, mwh:8.4, kw:50 }
 ];
-
 /* ====== Load from monitoring (optional) ====== */
 async function tryFetchMonitoring(){
   try{
@@ -694,7 +784,6 @@ async function tryFetchMonitoring(){
     }
   }catch(e){ /* ignore */ }
 }
-
 /* ====== Map center detection ====== */
 function detectMapCenter(){
   if (window.L && window.gsunLeafletMap && typeof window.gsunLeafletMap.getCenter==='function'){
@@ -715,7 +804,6 @@ function detectMapCenter(){
   }
   return null;
 }
-
 /* ====== Click on map chips (data-lat / data-lon) ====== */
 (function enableChipClicks(){
   const mapSection = document.querySelector('#map .map');
@@ -730,7 +818,6 @@ function detectMapCenter(){
     }
   });
 })();
-
 /* ====== Manual center ====== */
 let manualCenter = null;
 function setManualCenter(c){
@@ -741,7 +828,6 @@ function setManualCenter(c){
   if (lonEl) lonEl.textContent = (c?.lon ?? '—').toLocaleString('ru-RU', {maximumFractionDigits:6});
   recalcRadius();
 }
-
 /* ====== Haversine ====== */
 function haversine(lat1, lon1, lat2, lon2){
   const R = 6371, toRad = d => d*Math.PI/180;
@@ -749,7 +835,6 @@ function haversine(lat1, lon1, lat2, lon2){
   const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
   return R * (2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
-
 /* ====== Radius calc ====== */
 function getCenterObj(){
   const id = document.getElementById('radiusCenter')?.value;
@@ -794,7 +879,6 @@ function recalcRadius(){
   out.proEl.textContent   = proMWh.toLocaleString('ru-RU', {maximumFractionDigits:2});
   out.rubEl.textContent   = Math.round(proRub).toLocaleString('ru-RU');
 }
-
 /* ====== Bindings ====== */
 ['radiusCenter','radiusKm','tariff','useMapCenter','excludeSelf'].forEach(id=>{
   const el = document.getElementById(id);
@@ -805,37 +889,12 @@ document.getElementById('syncMapCenter')?.addEventListener('click', ()=>{
   if (live) setManualCenter(live);
   else recalcRadius();
 });
-
 document.addEventListener('DOMContentLoaded', async ()=>{
   await tryFetchMonitoring();
   const live = detectMapCenter();
   if (live) setManualCenter(live); else recalcRadius();
 });
 </script>
-
-
-<script>
-// Franchise tabs highlight
-(function(){
-  const tabs = document.querySelectorAll('#franchTabs .seg-btn');
-  const cards = document.querySelectorAll('.franch-card[data-pack]');
-  function activate(target){
-    tabs.forEach(b=>{
-      const on = b.dataset.target===target;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-selected', String(on));
-      b.setAttribute('aria-pressed', String(on));
-    });
-    cards.forEach(c=>c.classList.toggle('is-highlighted', c.dataset.pack===target));
-    document.getElementById('pack-'+target)?.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
-  }
-  tabs.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.target)));
-  // default: Pro highlighted
-  activate('pro');
-})();
-</script>
-
-
 <!-- Lead Modal -->
 <div id="leadModal" class="modal" aria-hidden="true" aria-labelledby="leadTitle">
   <div class="modal-card" role="dialog" aria-modal="true">
@@ -877,10 +936,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     </form>
   </div>
 </div>
-
-
 <script>
-// Franchise tabs highlight for current markup
+// Franchise tabs highlight (FIXED & STABLE)
 (function(){
   const tabs = document.querySelectorAll('#franchTabs .seg-btn');
   const cards = {
@@ -888,21 +945,40 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     pro: document.getElementById('pack-pro'),
     enterprise: document.getElementById('pack-enterprise')
   };
+
   function activate(target){
-    tabs.forEach(b=>{
-      const on = b.dataset.target===target;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-selected', String(on));
+    // 1. Обновляем состояние кнопок
+    tabs.forEach(button => {
+      const isActive = button.dataset.target === target;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-selected', String(isActive));
     });
-    Object.entries(cards).forEach(([k,el])=>{
-      if (el) el.classList.toggle('is-highlighted', k===target);
+
+    // 2. Обновляем состояние карточек
+    Object.entries(cards).forEach(([key, card]) => {
+      if (!card) return;
+      const isActive = key === target;
+      card.classList.toggle('is-highlighted', isActive);
     });
-    if (cards[target]) cards[target].scrollIntoView({behavior:'smooth', block:'nearest'});
+
+    // 3. Плавно скроллим к активной карточке
+    if (cards[target]) {
+      cards[target].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
-  tabs.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.target)));
+
+  // Назначаем обработчики кликов
+  tabs.forEach(button => {
+    button.addEventListener('click', () => {
+      activate(button.dataset.target);
+    });
+  });
+
+  // По умолчанию активируем вкладку "Pro"
   activate('pro');
 })();
-
+</script>
+<script>
 // Modal lead form
 (function(){
   const modal = document.getElementById('leadModal');
@@ -912,9 +988,8 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const cancelBtn = document.getElementById('leadCancel');
   const form = document.getElementById('leadForm');
   const submitBtn = document.getElementById('leadSubmit');
-  const OWNER_EMAIL = document.body?.dataset?.ownerEmail || 'owner@example.com'; // set your email via <body data-owner-email="you@...">
-  const FORMS_ENDPOINT = window.FORMS_ENDPOINT || window.GSUN_FORMS_ENDPOINT || ''; // e.g. 'https://formspree.io/f/xxxx'
-
+  const OWNER_EMAIL = 'Support@greensun.energy';
+  const FORMS_ENDPOINT = 'https://formsubmit.co/' + OWNER_EMAIL;
   function openModal(pack){
     packLabel.textContent = pack;
     packInput.value = pack;
@@ -922,10 +997,12 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     modal.setAttribute('aria-hidden','false');
     setTimeout(()=>document.getElementById('leadName')?.focus(), 50);
   }
+
   function closeModal(){
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden','true');
   }
+
   [closeBtn, cancelBtn].forEach(el=>el?.addEventListener('click', closeModal));
   modal.addEventListener('click', (e)=>{ if (e.target===modal) closeModal(); });
 
@@ -946,7 +1023,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     e.preventDefault();
     submitBtn.disabled = true;
     submitBtn.textContent = 'Отправка…';
-
     const payload = {
       package: packInput.value,
       name: form.name.value,
@@ -957,7 +1033,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       page: location.href,
       when: new Date().toISOString()
     };
-
     try{
       if (FORMS_ENDPOINT){
         const r = await fetch(FORMS_ENDPOINT, {
@@ -995,6 +1070,5 @@ Email: ${payload.email}
   window.openLeadModal = openModal;
 })();
 </script>
-
 </body>
 </html>
